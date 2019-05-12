@@ -19,7 +19,7 @@ If the model is created, and functionnal (tests are successful), it can be pushe
 
 Finally, once the new model is deployed, the mode can be switched to **ENGAGED**. The network is now secured, and any suspicious action will be reported to the owner.
 
-## Install
+## Install - not working
 
 Clone the project on your host computer.
 
