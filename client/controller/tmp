@@ -1,0 +1,108 @@
+
+    def changeMode(self):
+         print("Mode changed !")
+
+    def do_decrypt(self,ciphertext):
+        """      while len(ciphertext) % 16 != 0:
+            ciphertext = ciphertext + b"~" """
+        try:
+            if(len(ciphertext)) % 16 != 0:
+                raise OverflowError
+            obj2 = AES.new('a08120efc24743a690b3bb25a30b38f7', AES.MODE_CBC, 'This is an IV456')
+            message = obj2.decrypt(ciphertext)
+            message = message.decode("utf-8") 
+            message = message.replace(" ","")
+            message = bytes(message, encoding= 'utf-8')
+            message = b64decode(message)
+            
+        except (OverflowError, UnicodeDecodeError):
+            message = b"BAD_MSG"
+        return message
+
+
+ a = CInputs()
+        t1 = threading.Thread(target=a.getInput)
+        t1.start()
+
+
+                
+    # thread fuction 
+    def threaded(self,c): 
+        try:
+            while True: 
+                data = c.recv(2048) 
+                len(data)
+                data = self.do_decrypt(data)
+                print(data)
+                if not data: 
+                    print('Bye') 
+                    
+                    self.print_lock.release() 
+                    break
+                elif b"CMD::CM::" in data: 
+                    self.changeMode()
+
+                elif b"BAD_MSG" in data:
+                    c.send(b"NOK\n")               
+                
+        
+        except Exception as e:
+            print(e)
+            c.close() 
+    
+    
+    def run(self): 
+        try:
+            host = "" 
+        
+            port = 12345
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind((host, port)) 
+            print("socket binded to post", port) 
+        
+            # put the socket into listening mode 
+            s.listen(5) 
+            print("socket is listening") 
+        
+            # a forever loop until client wants to exit 
+            while True: 
+        
+                # establish connection with client 
+                c, addr = s.accept() 
+        
+                # lock acquired by client 
+                self.print_lock.acquire() 
+                print('Connected to :', addr[0], ':', addr[1]) 
+        
+                # Start a new thread and return its identifier 
+                start_new_thread(self.threaded, (c,)) 
+        except Exception as e:
+            print(e)
+            s.close() 
+    
+
+
+    # serialize model to JSON
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+model.save_weights("model.h5")
+print("Saved model to disk")
+ 
+# later...
+ 
+# load json and create model
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+loaded_model.load_weights("model.h5")
+print("Loaded model from disk")
+ 
+# evaluate loaded model on test data
+loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+score = loaded_model.evaluate(X, Y, verbose=0)
+print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))

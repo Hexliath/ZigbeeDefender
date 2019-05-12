@@ -1,0 +1,3 @@
+[submodule "others/whsniff"]
+	path = others/whsniff
+	url = https://github.com/homewsn/whsniff.git
