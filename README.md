@@ -5,11 +5,11 @@
 Zigbee Defender is the result of a research project from ISEN engineering school.
 The project aim is to protect a Zigbee home infrastructure using Deep Learning.
 
-The central node (named coordinator) analyse the traffic and detect intrusion (or malicious attemps) and alerts the network owner. 
+The central node (named coordinator) analyses the traffic and detects intrusion (or malicious attemps) and alerts the network owner. 
 
 First of all,  Zigbee Defender has to learn the classic behavior of the targeted network. All data from nodes are collected and a dataset is created. This is the **TRAINING** mode. It has to be run for several day (At least one week).
 
-In second, when the dataset is consistent, a model is trained with the dataset which has been divided in three parts like :
+When the dataset is consistent, a model is trained with the dataset that has been divided in three parts :
 - Training set
 - Test set
 - Verification set
